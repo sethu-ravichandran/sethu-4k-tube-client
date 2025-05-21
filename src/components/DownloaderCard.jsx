@@ -35,6 +35,17 @@ const DownloaderCard = () => {
         setProgress(100)
         if (success && filename) {
           setVideoFilename(filename)
+
+          // Trigger automatic file download
+          const downloadUrl = `${BACKEND_URL}/downloads/${encodeURIComponent(
+            filename
+          )}`
+          const a = document.createElement('a')
+          a.href = downloadUrl
+          a.download = filename // Hint to browser to download file
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
         }
       }
     })
@@ -45,7 +56,6 @@ const DownloaderCard = () => {
     }
   }, [])
 
-  // Download trigger
   const handleDownload = async () => {
     setMessage('')
     setDetailedError('')
@@ -110,7 +120,10 @@ const DownloaderCard = () => {
       <div className="space-y-4 px-6 pb-4">
         {/* Input: URL */}
         <div className="space-y-2">
-          <label htmlFor="youtube-url" className="text-sm font-medium text-gray-700">
+          <label
+            htmlFor="youtube-url"
+            className="text-sm font-medium text-gray-700"
+          >
             YouTube URL
           </label>
           <input
@@ -125,7 +138,10 @@ const DownloaderCard = () => {
 
         {/* Input: Quality */}
         <div className="space-y-2">
-          <label htmlFor="quality" className="text-sm font-medium text-gray-700">
+          <label
+            htmlFor="quality"
+            className="text-sm font-medium text-gray-700"
+          >
             Video Quality
           </label>
           <select
@@ -214,7 +230,9 @@ const DownloaderCard = () => {
             controlsList="nodownload nofullscreen noremoteplayback"
             disablePictureInPicture
             className="w-full mt-4 rounded-md border"
-            src={`${BACKEND_URL}/downloads/${videoFilename}`}
+            src={`${BACKEND_URL}/downloads/${encodeURIComponent(
+              videoFilename
+            )}`}
           />
         </div>
       )}
